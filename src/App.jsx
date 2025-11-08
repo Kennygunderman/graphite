@@ -1,9 +1,13 @@
 import { useState, useEffect } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { Input } from '@/components/ui/input'
+import { Search } from 'lucide-react'
 
 function App() {
   const [exercises, setExercises] = useState([])
+  const [searchTerm, setSearchTerm] = useState('')
+  const [selectedMuscleGroup, setSelectedMuscleGroup] = useState('All')
 
   useEffect(() => {
     fetch('/exercises.json')
@@ -11,6 +15,14 @@ function App() {
       .then(data => setExercises(data))
       .catch(error => console.error('Error loading exercises:', error))
   }, [])
+
+  const muscleGroups = ['All', ...new Set(exercises.map(ex => ex.muscleGroup))]
+
+  const filteredExercises = exercises.filter(exercise => {
+    const matchesSearch = exercise.name.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesMuscleGroup = selectedMuscleGroup === 'All' || exercise.muscleGroup === selectedMuscleGroup
+    return matchesSearch && matchesMuscleGroup
+  })
 
   const getMuscleGroupColor = (muscleGroup) => {
     const colors = {
@@ -41,8 +53,39 @@ function App() {
       <div className="container mx-auto">
         <h1 className="text-4xl font-bold text-white mb-8">Exercise List</h1>
         
+        {/* Search Bar */}
+        <div className="mb-6">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <Input
+              type="text"
+              placeholder="Search exercises..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10 bg-gray-800 border-gray-700 text-white placeholder:text-gray-400"
+            />
+          </div>
+        </div>
+
+        {/* Muscle Group Filter */}
+        <div className="mb-6 flex flex-wrap gap-2">
+          {muscleGroups.map(group => (
+            <button
+              key={group}
+              onClick={() => setSelectedMuscleGroup(group)}
+              className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                selectedMuscleGroup === group
+                  ? 'bg-blue-600 text-white shadow-md'
+                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700 border border-gray-700'
+              }`}
+            >
+              {group}
+            </button>
+          ))}
+        </div>
+        
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[600px] overflow-y-auto pr-2">
-          {exercises.map((exercise, index) => (
+          {filteredExercises.map((exercise, index) => (
             <Card key={index} className="hover:shadow-xl hover:shadow-blue-500/10 transition-all duration-200 bg-gray-800 border-gray-700">
               <CardContent className="p-5">
                 <h3 className="font-semibold text-lg mb-3 text-white leading-tight">
