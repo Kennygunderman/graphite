@@ -1,16 +1,8 @@
 import exercises from './exercises.json'
-import './App.css'
+import ExerciseList from './components/ExerciseList'
 
 function App() {
-  return (
-    <ul>
-      {exercises.map((exercise, index) => (
-        <li key={index}>
-          {exercise.name} - {exercise.type} - {exercise.muscleGroup}
-        </li>
-      ))}
-    </ul>
-  )
+  return <ExerciseList exercises={exercises} />
 }
 
 export default App
