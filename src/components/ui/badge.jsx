@@ -2,12 +2,12 @@ import { cn } from '../../lib/utils'
 
 export function Badge({ className, variant = 'default', ...props }) {
   const variants = {
-    default: 'bg-gray-100 text-gray-800 border-gray-200',
-    blue: 'bg-blue-100 text-blue-800 border-blue-200',
-    green: 'bg-emerald-100 text-emerald-800 border-emerald-200',
-    orange: 'bg-orange-100 text-orange-800 border-orange-200',
-    violet: 'bg-violet-100 text-violet-800 border-violet-200',
-    slate: 'bg-slate-100 text-slate-800 border-slate-200',
+    default: 'bg-slate-800 text-slate-200 border-slate-700',
+    blue: 'bg-blue-500/15 text-blue-300 border-blue-400/20',
+    green: 'bg-emerald-500/15 text-emerald-300 border-emerald-400/20',
+    orange: 'bg-orange-500/15 text-orange-300 border-orange-400/20',
+    violet: 'bg-violet-500/15 text-violet-300 border-violet-400/20',
+    slate: 'bg-slate-700 text-slate-200 border-slate-600',
   }
 
   return (
